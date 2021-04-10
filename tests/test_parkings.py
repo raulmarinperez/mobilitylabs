@@ -4,6 +4,7 @@ import configparser
 import argparse
 import logging
 import pprint
+import sys
 import os
 
 # Auxiliary functions
@@ -76,7 +77,7 @@ if (parkingService.isLoggedIn()):
       infoParking(parkingService, args.parkingId)
     else:
       logging.error("A parking area identifier has to be provided")
-      sys.exit("A parking area identifier has to be provided for action 'inforParkin'")
+      sys.exit("A parking area identifier has to be provided for action 'infoParking'")
   elif args.action == "availability":
     logging.debug("XClientID '%s' asking for availability in parking areas" % XClientID)
     availability(parkingService)
