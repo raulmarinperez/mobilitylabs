@@ -136,7 +136,7 @@ class BusEMTMad(MobilityLabs):
                   (resp.status_code, resp.reason))
     return None
 
-  def incidents(self,lineId):
+  def issues(self,lineId):
     '''It returns details about incidents or issues identified and impacting bus lines.
 
             Parameters:
@@ -161,7 +161,7 @@ class BusEMTMad(MobilityLabs):
                   (lineId, resp.status_code, resp.reason))
     return None
 
-  def busesarrivals(self, stopId, lineId=""):
+  def busesArrivals(self, stopId, lineId=""):
     '''It returns the real time estimation of how far the buses are from the stop and how much time
        will take them to get to the bus stop. Only buses from the line specified will be considered.
 
