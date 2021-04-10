@@ -18,7 +18,7 @@ class MobilityLabs:
     logging.debug("New MobilityLabs instance for X-ClientId '%s'" % self._XClientId)
 
   def isLoggedIn(self):
-    return self._logged_in
+    return self._loggedIn
 
   def logIn(self):
     url = "%s/mobilitylabs/user/login/" % self.MLURL
