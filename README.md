@@ -25,8 +25,8 @@ The `BusEMTMad` class allows you to leverage information about buses in the grea
 The following are the functions/webmethods wrapped at the moment:
 
 - **infoLines(dateRef) -** It returns the list of active bus lines in the reference date.
-- **infoLine(self, lineId, dateRef) -** It returns detailed info of a specific bus line in the reference date.
-- **infoStops -** It returns the list of active bus stops and information about them.
+- **infoLine(lineId, dateRef) -** It returns detailed info of a specific bus line in the reference date.
+- **infoStops() -** It returns the list of active bus stops and information about them.
 - **infoStop(stopId) -** It returns detailed info of a specific bus stop.
 - **lineStops(lineId,direction) -** It returns the list of bus stops of a bus line keeping in mind the direction (1 - start to end, 2 - end to start)
 - **issues(lineId) -** It returns details about incidents or issues identified and impacting bus lines.
@@ -62,9 +62,9 @@ The `BiciMad` class allows you to leverage information about bikes and bike stat
 
 The following are the functions/webmethods wrapped at the moment:
 
-- **infoBikeStations -** It returns the details of Madrid BiciMad Stations.
-- **infoBikeStation(bikeStationId): -** It returns the details of a specific Madrid BiciMad Station.
-- **infoBikes -** It returns the details of Madrid BiciMad bikes.
+- **infoBikeStations() -** It returns the details of Madrid BiciMad Stations.
+- **infoBikeStation(bikeStationId) -** It returns the details of a specific Madrid BiciMad Station.
+- **infoBikes() -** It returns the details of Madrid BiciMad bikes.
 - **infoBike(bikeId): -** It returns the details of a specific bike from the Madrid BiciMad service.
 
 `test_bicimad.py` let you test this service easily; before you can use it, get your own XClientID and passkey and store them into the `credentials.ini` file. `test_bicimad.py -h` will give you all the details on how to run it:
@@ -88,3 +88,27 @@ optional arguments:
 ```
 
 ## ParkingEMTMad
+The `ParkingEMTMad` class allows you to leverage information about parking areas in the great city of Madrid, which is provided by the EMT (Empresa Municipal de Transportes); this class wrapps the [Block 5 PARKINGS](https://apidocs.emtmadrid.es/#api-Block_5_PARKINGS) section in the official documentation, although not all the functions/webmethods are wrapped.
+
+The following are the functions/webmethods wrapped at the moment:
+
+- **infoParkings() -** It returns the list of active parking areas operated by the EMT.
+- **infoParking(parkingId) -** It returns the details of a specific parking area.
+- **availability() -** It returns availability for those parking areas publishing this information. Not all of them make this information public.
+
+`test_parkings.py` let you test this service easily; before you can use it, get your own XClientID and passkey and store them into the `credentials.ini` file. `test_parkings.py -h` will give you all the details on how to run it:
+
+```
+$ tests/test_parkings.py -h
+usage: test_parkings.py [-h] [-id PARKINGID] {infoParkings,infoParking,availability} credentialsFile
+
+positional arguments:
+  {infoParkings,infoParking,availability}
+                        what is going to be requested to the ParkingEMTMad service
+  credentialsFile       path to the file with info to access the service
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -id PARKINGID, --parkingId PARKINGID
+                        parking area identifier for action 'infoParking'
+```
