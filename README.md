@@ -12,6 +12,13 @@ The following are the requirements needed to make it work:
 
 This Python library has been successfully tested with [OSBDET S21R1](https://github.com/raulmarinperez/osbdet/tree/vs21r1) on a Debian 10 x64 host.
 
+Remember to add the library to the **PYTHONPATH environment variable** if you want to use it from your code or if you want to run the tests Python scripts; you can do by running the following line within the folder where the repo was cloned:
+
+```
+$ export PYTHONPATH=$PYTHONPATH:`pwd`
+```
+If you want to persist this environment variable, **add it to your user's profile** and it'll be created everytime you log into your computer.
+
 ## BusEMTMad
 The `BusEMTMad` class allows you to leverage information about buses in the great city of Madrid, which is provided by the EMT (Empresa Municipal de Transportes); this class wrapps the [Block 3 TRANSPORT BUSEMTMAD](https://apidocs.emtmadrid.es/#api-Block_3_TRANSPORT_BUSEMTMAD) section in the official documentation, although not all the functions/webmethods are wrapped.
 
@@ -28,7 +35,6 @@ The following are the functions/webmethods wrapped at the moment:
 `test_busemtmad.py` let you test this service easily; before you can use it, get your own XClientID and passkey and store them into the `credentials.ini` file. `test_busemtmad.py -h` will give you all the details on how to run it:
 
 ```
-$ export PYTHONPATH=$PYTHONPATH:`pwd`
 $ tests/test_busemtmad.py -h
 usage: test_busemtmad.py [-h] [-lid LINEID] [-sid STOPID] [-dir {1,2}]
                          {infoLines,infoLine,infoStops,infoStop,lineStops,issues,busesArrivals} credentialsFile
@@ -52,5 +58,33 @@ optional arguments:
 
 
 ## BiciMAD Go
+The `BiciMad` class allows you to leverage information about bikes and bike stations in the great city of Madrid, which is provided by the BiciMAD GO service; this class wrapps the [Block 4 TRANSPORT BICIMAD](https://apidocs.emtmadrid.es/#api-Block_4_TRANSPORT_BICIMAD) section in the official documentation, although not all the functions/webmethods are wrapped.
+
+The following are the functions/webmethods wrapped at the moment:
+
+- **infoBikeStations -** It returns the details of Madrid BiciMad Stations.
+- **infoBikeStation(bikeStationId): -** It returns the details of a specific Madrid BiciMad Station.
+- **infoBikes -** It returns the details of Madrid BiciMad bikes.
+- **infoBike(bikeId): -** It returns the details of a specific bike from the Madrid BiciMad service.
+
+`test_bicimad.py` let you test this service easily; before you can use it, get your own XClientID and passkey and store them into the `credentials.ini` file. `test_bicimad.py -h` will give you all the details on how to run it:
+
+```
+$ tests/test_bicimad.py -h
+usage: test_bicimad.py [-h] [-sid BIKESTATIONID] [-bid BIKEID]
+                       {infoBikeStations,infoBikeStation,infoBikes,infoBike} credentialsFile
+
+positional arguments:
+  {infoBikeStations,infoBikeStation,infoBikes,infoBike}
+                        what is going to be requested to the BiciMAD GO service
+  credentialsFile       path to the file with info to access the service
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -sid BIKESTATIONID, --bikeStationId BIKESTATIONID
+                        bike station identifier for action 'infoBikeStation'
+  -bid BIKEID, --bikeId BIKEID
+                        bike identifier for action 'infoBike'
+```
 
 ## ParkingEMTMad
