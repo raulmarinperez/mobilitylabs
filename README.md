@@ -112,3 +112,6 @@ optional arguments:
   -id PARKINGID, --parkingId PARKINGID
                         parking area identifier for action 'infoParking'
 ```
+
+## Changelog
+- **v0.1 (20210410) -** initial release.
