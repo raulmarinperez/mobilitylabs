@@ -9,98 +9,98 @@ import os
 
 # Auxiliary functions
 #
-def infoBikeStations(bicimadService):
-  infoBikeStations = bicimadService.infoBikeStations()
+def info_bike_stations(bicimad_service):
+  info_bike_stations = bicimad_service.info_bike_stations()
 
-  if infoBikeStations!=None:
+  if info_bike_stations!=None:
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(infoBikeStations)
+    pp.pprint(info_bike_stations)
   else:
     print("The BiciMAD GO service didn't return any data.")
 
-def infoBikeStation(bicimadService, bikeStationId):
-  infoBikeStation = bicimadService.infoBikeStation(bikeStationId)
+def info_bike_station(bicimad_service, bike_station_id):
+  info_bike_station = bicimad_service.info_bike_station(bike_station_id)
 
-  if infoBikeStation!=None:
+  if info_bike_station!=None:
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(infoBikeStation)
+    pp.pprint(info_bike_station)
   else:
     print("The BiciMAD GO service didn't return any data.")
 
-def infoBikes(bicimadService):
-  infoBikes = bicimadService.infoBikes()
+def info_bikes(bicimad_service):
+  info_bikes = bicimad_service.info_bikes()
 
-  if infoBikes!=None:
+  if info_bikes!=None:
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(infoBikes)
+    pp.pprint(info_bikes)
   else:
     print("The BiciMAD GO service didn't return any data.")
 
-def infoBike(bicimadService, bikeId):
-  infoBike= bicimadService.infoBike(bikeId)
+def info_bike(bicimad_service, bike_id):
+  info_bike= bicimad_service.info_bike(bike_id)
 
-  if infoBike!=None:
+  if info_bike!=None:
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(infoBike)
+    pp.pprint(info_bike)
   else:
     print("The BiciMAD GO service didn't return any data.")
 
 # Setting up debuging level and debug file with environment variables
 #
-debugLevel = os.environ.get('MOBILITYLABS_DEBUGLEVEL',logging.WARN)
-debugFile = os.environ.get('MOBILITYLABS_DEBUGFILE')
+debug_level = os.environ.get('MOBILITYLABS_DEBUGLEVEL',logging.WARN)
+debug_file = os.environ.get('MOBILITYLABS_DEBUGFILE')
 
-if debugFile==None:
-  logging.basicConfig(level=debugLevel)
+if debug_file==None:
+  logging.basicConfig(level=debug_level)
 else:
-  logging.basicConfig(filename=debugFile, filemode='w', level=debugLevel)
+  logging.basicConfig(filename=debug_file, filemode='w', level=debug_level)
 
 parser = argparse.ArgumentParser()
-parser.add_argument("action", choices=['infoBikeStations', 'infoBikeStation', 'infoBikes', 'infoBike'],
+parser.add_argument("action", choices=['info_bike_stations', 'info_bike_station', 'info_bikes', 'info_bike'],
                     help="what is going to be requested to the BiciMAD GO service")
-parser.add_argument("credentialsFile", help="path to the file with info to access the service")
-parser.add_argument("-sid", "--bikeStationId",
-                    help="bike station identifier for action 'infoBikeStation'")
-parser.add_argument("-bid", "--bikeId",
-                    help="bike identifier for action 'infoBike'")
+parser.add_argument("credentials_file", help="path to the file with info to access the service")
+parser.add_argument("-sid", "--bike_station_id",
+                    help="bike station identifier for action 'info_bike_station'")
+parser.add_argument("-bid", "--bike_id",
+                    help="bike identifier for action 'info_bike'")
 args = parser.parse_args()
 
 # Read credentials to instantiate the class to use the service
 #
 credentials = configparser.ConfigParser()
-credentials.read(args.credentialsFile)
+credentials.read(args.credentials_file)
 
-XClientID = credentials['DEFAULT']['XClientID']
-passkey = credentials['DEFAULT']['passkey']
-bicimadService = BiciMad(XClientID, passkey)
-bicimadService.logIn()
+x_client_id = credentials['DEFAULT']['x_client_id']
+pass_key = credentials['DEFAULT']['pass_key']
+bicimad_service = BiciMad(x_client_id, pass_key)
+bicimad_service.log_in()
 
 # Action dispatching if credentials logged the client into the service
 #
-if (bicimadService.isLoggedIn()):
-  if args.action == "infoBikeStations":
-    logging.debug("XClientID '%s' asking for bike stations information" % XClientID)
-    infoBikeStations(bicimadService)
-  elif args.action == "infoBikeStation":
-    if args.bikeStationId!=None:
-      logging.debug("XClientID '%s' asking for information for bike station '%s'" %
-                    (XClientID, args.bikeStationId))
-      infoBikeStation(bicimadService, args.bikeStationId)
+if (bicimad_service.is_logged_in()):
+  if args.action == "info_bike_stations":
+    logging.debug("x_client_id '%s' asking for bike stations information" % x_client_id)
+    info_bike_stations(bicimad_service)
+  elif args.action == "info_bike_station":
+    if args.bike_station_id!=None:
+      logging.debug("x_client_id '%s' asking for information for bike station '%s'" %
+                    (x_client_id, args.bike_station_id))
+      info_bike_station(bicimad_service, args.bike_station_id)
     else:
       logging.error("A bike station identifier has to be provided")
-      sys.exit("A bike station identifier has to be provided for action 'infoBikeStation'")
-  elif args.action == "infoBikes":
-    logging.debug("XClientID '%s' asking for bikes information" % XClientID)
-    infoBikes(bicimadService)
-  elif args.action == "infoBike":
-    if args.bikeId!=None:
-      logging.debug("XClientID '%s' asking for information for bike '%s'" %
-                    (XClientID, args.bikeId))
-      infoBike(bicimadService, args.bikeId)
+      sys.exit("A bike station identifier has to be provided for action 'info_bike_station'")
+  elif args.action == "info_bikes":
+    logging.debug("x_client_id '%s' asking for bikes information" % x_client_id)
+    info_bikes(bicimad_service)
+  elif args.action == "info_bike":
+    if args.bike_id!=None:
+      logging.debug("x_client_id '%s' asking for information for bike '%s'" %
+                    (x_client_id, args.bike_id))
+      info_bike(bicimad_service, args.bike_id)
     else:
       logging.error("A bike identifier has to be provided")
-      sys.exit("A bike identifier has to be provided for action 'infoBike'")
+      sys.exit("A bike identifier has to be provided for action 'info_bike'")
   else:
-    logging.error("Unsuccessful login with XClientID '%s%'" % XClientId)
-    sys.exit("Unsuccessful login with XClientID '%s%'" % XClientId)
+    logging.error("Unsuccessful login with x_client_id '%s%'" % XClientId)
+    sys.exit("Unsuccessful login with x_client_id '%s%'" % XClientId)
 

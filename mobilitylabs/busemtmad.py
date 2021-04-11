@@ -10,22 +10,22 @@ class BusEMTMad(MobilityLabs):
      It extends the MobilityLabs class which encapsulates common functionality
      such authentication shared across several other classes.
   '''
-  def __init__(self, XClientId, passKey):
-    MobilityLabs.__init__(self, XClientId, passKey)
+  def __init__(self, x_client_id, pass_key):
+    MobilityLabs.__init__(self, x_client_id, pass_key)
 
-  def infoLines(self, dateRef):
+  def info_lines(self, date_ref):
     '''It returns the list of active lines in the reference date.
 
             Parameters:
-                    dateRef (string): date reference in YYYYMMDD format
+                    date_ref (string): date reference in YYYYMMDD format
 
             Returns:
                     Array of JSON documents with information about the lines
                     or None if there was an error.
                     (See https://apidocs.emtmadrid.es/#api-Block_3_TRANSPORT_BUSEMTMAD-infolinegeneral for more info)
     '''
-    url = "%s/transport/busemtmad/lines/info/%s/" % (self.MLURL, dateRef)
-    headers = {'accessToken': self._accessToken}
+    url = "%s/transport/busemtmad/lines/info/%s/" % (self.MLURL, date_ref)
+    headers = {'accessToken': self._access_token}
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
@@ -36,12 +36,12 @@ class BusEMTMad(MobilityLabs):
                   (resp.status_code, resp.reason))
     return None
 
-  def infoLine(self, lineId, dateRef):
+  def info_line(self, line_id, date_ref):
     '''It returns detailed info of a specific line in the reference date.
 
             Parameters:
-                    lineId (string): bus line identifier
-                    dateRef (string): date reference in YYYYMMDD format
+                    line_id (string): bus line identifier
+                    date_ref (string): date reference in YYYYMMDD format
 
             Returns:
                     Array of JSON documents (most likely with one single document) containing 
@@ -49,20 +49,20 @@ class BusEMTMad(MobilityLabs):
                     (See https://apidocs.emtmadrid.es/#api-Block_3_TRANSPORT_BUSEMTMAD-infolinedetail for more info)
     '''
     url = "%s/transport/busemtmad/lines/%s/info/%s/" % \
-          (self.MLURL, lineId, dateRef)
-    headers = {'accessToken': self._accessToken}
+          (self.MLURL, line_id, date_ref)
+    headers = {'accessToken': self._access_token}
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
       logging.debug("Info of line '%s': %s" % \
-                    (lineId, resp.json()['data']))
+                    (line_id, resp.json()['data']))
       return resp.json()['data']
 
     logging.error("Unable to retrieve the detailed info of line '%s'  with code '%s' and message: %s" %
-                  (lineId, resp.status_code, resp.reason))
+                  (line_id, resp.status_code, resp.reason))
     return None
 
-  def infoStops(self):
+  def info_stops(self):
     '''It returns the list of active bus stops and information about them.
 
             Parameters:
@@ -74,7 +74,7 @@ class BusEMTMad(MobilityLabs):
                     (See https://apidocs.emtmadrid.es/#api-Block_3_TRANSPORT_BUSEMTMAD-infostopgeneral for more info)
     '''
     url = "%s/transport/busemtmad/stops/list/" % self.MLURL
-    headers = {'accessToken': self._accessToken}
+    headers = {'accessToken': self._access_token}
     resp = requests.post(url, headers=headers)
 
     if resp.status_code == 200:
@@ -85,11 +85,11 @@ class BusEMTMad(MobilityLabs):
                   (resp.status_code, resp.reason))
     return None
 
-  def infoStop(self, stopId):
+  def info_stop(self, stop_id):
     '''It returns detailed info of a specific bus stop.
 
             Parameters:
-                    stopId (string): bus stop identifier
+                    stop_id (string): bus stop identifier
 
             Returns:
                     Array of JSON documents (most likely with one single document) containing
@@ -97,24 +97,24 @@ class BusEMTMad(MobilityLabs):
                     (See https://apidocs.emtmadrid.es/#api-Block_3_TRANSPORT_BUSEMTMAD-detail_of_stop for more info)
     '''
     url = "%s/transport/busemtmad/stops/%s/detail/" % \
-          (self.MLURL, stopId)
-    headers = {'accessToken': self._accessToken}
+          (self.MLURL, stop_id)
+    headers = {'accessToken': self._access_token}
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
       logging.debug("Info of stop '%s': %s" % \
-                    (stopId, resp.json()['data']))
+                    (stop_id, resp.json()['data']))
       return resp.json()['data']
 
     logging.error("Unable to retrieve the detailed info of stop '%s'  with code '%s' and message: %s" %
-                  (lineId, resp.status_code, resp.reason))
+                  (line_id, resp.status_code, resp.reason))
     return None
 
-  def lineStops(self,lineId,direction):
+  def line_stops(self, line_id,direction):
     '''It returns the list of stops of a line keeping in mind the direction
 
             Parameters:
-                    lineId (string): bus line identifier
+                    line_id (string): bus line identifier
                     direction (string): "1" from start to end; "2" from end to start
 
             Returns:
@@ -123,24 +123,24 @@ class BusEMTMad(MobilityLabs):
                     (See https://apidocs.emtmadrid.es/#api-Block_3_TRANSPORT_BUSEMTMAD-stops for more info)
     '''
     url = "%s/transport/busemtmad/lines/%s/stops/%s/" % \
-          (self.MLURL, lineId, direction)
-    headers = {'accessToken': self._accessToken}
+          (self.MLURL, line_id, direction)
+    headers = {'accessToken': self._access_token}
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
       logging.debug("Info of the stops of line '%s': %s" % \
-                    (lineId, resp.json()['data']))
+                    (line_id, resp.json()['data']))
       return resp.json()['data']
 
     logging.error("Unable to retrieve the list of stops with code '%s' and message: %s" %
                   (resp.status_code, resp.reason))
     return None
 
-  def issues(self,lineId):
+  def issues(self, line_id):
     '''It returns details about incidents or issues identified and impacting bus lines.
 
             Parameters:
-                    lineId (string): bus line identifier
+                    line_id (string): bus line identifier
 
             Returns:
                     Array of JSON documents (most likely with one single document) containing
@@ -148,27 +148,27 @@ class BusEMTMad(MobilityLabs):
                     (See https://apidocs.emtmadrid.es/#api-Block_3_TRANSPORT_BUSEMTMAD-incidents for more info)
     '''
     url = "%s/transport/busemtmad/lines/incidents/%s/" % \
-          (self.MLURL, lineId)
-    headers = {'accessToken': self._accessToken}
+          (self.MLURL, line_id)
+    headers = {'accessToken': self._access_token}
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
       logging.debug("Incidents or issues identified and impacting bus line '%s': %s" % \
-                    (lineId, resp.json()['data']))
+                    (line_id, resp.json()['data']))
       return resp.json()['data']
 
     logging.error("Unable to retrieve the list of incidents for the bus line '%s' with code '%s' and message: %s" %
-                  (lineId, resp.status_code, resp.reason))
+                  (line_id, resp.status_code, resp.reason))
     return None
 
-  def busesArrivals(self, stopId, lineId=""):
+  def buses_arrivals(self, stop_id, line_id=""):
     '''It returns the real time estimation of how far the buses are from the stop and how much time
        will take them to get to the bus stop. Only buses from the line specified will be considered.
 
             Parameters:
-                    stopId (string): bus stop identifier
-                    lineId (string): bus line identifier. Optional parameter, if no provided all lines 
-                                     for that stop will be considered.
+                    stop_id (string): bus stop identifier
+                    line_id (string): bus line identifier. Optional parameter, if no provided all lines 
+                                      for that stop will be considered.
 
             Returns:
                     Array of JSON documents (most likely with one single document) containing
@@ -176,8 +176,8 @@ class BusEMTMad(MobilityLabs):
                     (See https://apidocs.emtmadrid.es/#api-Block_3_TRANSPORT_BUSEMTMAD-arrives for more info)
     '''
     url = "%s/transport/busemtmad/stops/%s/arrives/%s/" % \
-          (self.MLURL, stopId, lineId)
-    headers = {'accessToken': self._accessToken}
+          (self.MLURL, stop_id, line_id)
+    headers = {'accessToken': self._access_token}
     body = '{"cultureInfo":"EN", \
              "Text_StopRequired_YN":"Y", \
              "Text_EstimationsRequired_YN":"Y", \
@@ -187,9 +187,9 @@ class BusEMTMad(MobilityLabs):
 
     if resp.status_code == 200:
       logging.debug("Buses arrival time and other info for stop '%s' in line '%s': %s" % \
-                    (stopId, lineId, resp.json()['data']))
+                    (stop_id, line_id, resp.json()['data']))
       return resp.json()['data']
 
     logging.error("Unable to retrieve info of buses arrival time for the stop '%s' and bus line '%s' with code '%s' and message: %s" %
-                  (stopId, lineId, resp.status_code, resp.reason))
+                  (stop_id, line_id, resp.status_code, resp.reason))
     return None

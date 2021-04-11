@@ -9,26 +9,26 @@ import os
 
 # Auxiliary functions
 #
-def infoParkings(parkingService):
-  infoParkings = parkingService.infoParkings()
+def info_parkings(parking_service):
+  info_parkings = parking_service.info_parkings()
 
-  if infoParkings!=None:
+  if info_parkings!=None:
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(infoParkings)
+    pp.pprint(info_parkings)
   else:
     print("The ParkingEMTMad service didn't return any data.")
 
-def infoParking(parkingService, parkingId):
-  infoParking = parkingService.infoParking(parkingId)
+def info_parking(parking_service, parking_id):
+  info_parking = parking_service.info_parking(parking_id)
 
-  if infoParking!=None:
+  if info_parking!=None:
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(infoParking)
+    pp.pprint(info_parking)
   else:
     print("The ParkingEMTMad service didn't return any data.")
 
-def availability(parkingService):
-  availability = parkingService.availability()
+def availability(parking_service):
+  availability = parking_service.availability()
 
   if availability!=None:
     pp = pprint.PrettyPrinter(indent=2)
@@ -38,49 +38,49 @@ def availability(parkingService):
 
 # Setting up debuging level and debug file with environment variables
 #
-debugLevel = os.environ.get('MOBILITYLABS_DEBUGLEVEL',logging.WARN)
-debugFile = os.environ.get('MOBILITYLABS_DEBUGFILE')
+debug_level = os.environ.get('MOBILITYLABS_DEBUGLEVEL',logging.WARN)
+debug_file = os.environ.get('MOBILITYLABS_DEBUGFILE')
 
-if debugFile==None:
-  logging.basicConfig(level=debugLevel)
+if debug_file==None:
+  logging.basicConfig(level=debug_level)
 else:
-  logging.basicConfig(filename=debugFile, filemode='w', level=debugLevel)
+  logging.basicConfig(filename=debug_file, filemode='w', level=debug_level)
 
 parser = argparse.ArgumentParser()
-parser.add_argument("action", choices=['infoParkings', 'infoParking', 'availability'],
+parser.add_argument("action", choices=['info_parkings', 'info_parking', 'availability'],
                     help="what is going to be requested to the ParkingEMTMad service")
-parser.add_argument("credentialsFile", help="path to the file with info to access the service")
-parser.add_argument("-id", "--parkingId", 
-                    help="parking area identifier for action 'infoParking'")
+parser.add_argument("credentials_file", help="path to the file with info to access the service")
+parser.add_argument("-id", "--parking_id", 
+                    help="parking area identifier for action 'info_parking'")
 args = parser.parse_args()
 
 # Read credentials to instantiate the class to use the service
 #
 credentials = configparser.ConfigParser()
-credentials.read(args.credentialsFile)
+credentials.read(args.credentials_file)
 
-XClientID = credentials['DEFAULT']['XClientID']
-passkey = credentials['DEFAULT']['passkey']
-parkingService = ParkingEMTMad(XClientID, passkey)
-parkingService.logIn()
+x_client_id = credentials['DEFAULT']['x_client_id']
+pass_key = credentials['DEFAULT']['pass_key']
+parking_service = ParkingEMTMad(x_client_id, pass_key)
+parking_service.log_in()
 
 # Action dispatching if credentials logged the client into the service
 #
-if (parkingService.isLoggedIn()):
-  if args.action == "infoParkings":
-    logging.debug("XClientID '%s' asking for parking areas information" % XClientID)
-    infoParkings(parkingService)
-  elif args.action == "infoParking":
-    if args.parkingId!=None:
-      logging.debug("XClientID '%s' asking for information for parking area '%s'" % 
-                    (XClientID, args.parkingId))
-      infoParking(parkingService, args.parkingId)
+if (parking_service.is_logged_in()):
+  if args.action == "info_parkings":
+    logging.debug("x_client_id '%s' asking for parking areas information" % x_client_id)
+    info_parkings(parking_service)
+  elif args.action == "info_parking":
+    if args.parking_id!=None:
+      logging.debug("x_client_id '%s' asking for information for parking area '%s'" % 
+                    (x_client_id, args.parking_id))
+      info_parking(parking_service, args.parking_id)
     else:
       logging.error("A parking area identifier has to be provided")
-      sys.exit("A parking area identifier has to be provided for action 'infoParking'")
+      sys.exit("A parking area identifier has to be provided for action 'info_parking'")
   elif args.action == "availability":
-    logging.debug("XClientID '%s' asking for availability in parking areas" % XClientID)
-    availability(parkingService)
+    logging.debug("x_client_id '%s' asking for availability in parking areas" % x_client_id)
+    availability(parking_service)
 else:
-  logging.error("Unsuccessful login with XClientID '%s%'" % XClientId)
-  sys.exit("Unsuccessful login with XClientID '%s%'" % XClientId)
+  logging.error("Unsuccessful login with x_client_id '%s%'" % x_client_id)
+  sys.exit("Unsuccessful login with x_client_id '%s%'" % x_client_id)

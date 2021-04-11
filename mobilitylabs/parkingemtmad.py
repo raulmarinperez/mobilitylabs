@@ -9,10 +9,10 @@ class ParkingEMTMad(MobilityLabs):
      It extends the MobilityLabs class which encapsulates common functionality
      such authentication shared across several other classes.
   '''
-  def __init__(self, XClientId, passKey):
-    MobilityLabs.__init__(self, XClientId, passKey)
+  def __init__(self, x_client_id, pass_key):
+    MobilityLabs.__init__(self, x_client_id, pass_key)
 
-  def infoParkings(self):
+  def info_parkings(self):
     '''It returns the list of active parking areas operated by the EMT.
 
             Parameters:
@@ -24,7 +24,7 @@ class ParkingEMTMad(MobilityLabs):
                     (See https://apidocs.emtmadrid.es/#api-Block_5_PARKINGS-parking_list for more info)
     '''
     url = "%s/citymad/places/parkings/EN/" % self.MLURL
-    headers = {'accessToken': self._accessToken}
+    headers = {'accessToken': self._access_token}
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
@@ -35,27 +35,27 @@ class ParkingEMTMad(MobilityLabs):
                   (resp.status_code, resp.reason))
     return None
 
-  def infoParking(self, parkingId):
+  def info_parking(self, parking_id):
     '''It returns the details of a specific parking area.
 
             Parameters:
-                    parkingId (string): parking area identifier
+                    parking_id (string): parking area identifier
 
             Returns:
                     Array of JSON documents (most likely with one single document) with information
                     about the parking area or None if there was an error.
                     (See https://apidocs.emtmadrid.es/#api-Block_5_PARKINGS-parking_detail for more info)
     '''
-    url = "%s/citymad/places/parking/%s/EN/" % (self.MLURL,parkingId)
-    headers = {'accessToken': self._accessToken}
+    url = "%s/citymad/places/parking/%s/EN/" % (self.MLURL,parking_id)
+    headers = {'accessToken': self._access_token}
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
-      logging.debug("Info of parking area '%s': %s" % (parkingId, resp.json()['data']))
+      logging.debug("Info of parking area '%s': %s" % (parking_id, resp.json()['data']))
       return resp.json()['data']
 
     logging.error("Unable to retrieve info for parking area station '%s' with code '%s' and message: %s" %
-                  (parkingId, resp.status_code, resp.reason))
+                  (parking_id, resp.status_code, resp.reason))
     return None
 
   def availability(self):
@@ -71,7 +71,7 @@ class ParkingEMTMad(MobilityLabs):
                     (See https://apidocs.emtmadrid.es/#api-Block_5_PARKINGS-parking_availability for more info)
     '''
     url = "%s/citymad/places/parkings/availability/" % (self.MLURL)
-    headers = {'accessToken': self._accessToken}
+    headers = {'accessToken': self._access_token}
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:

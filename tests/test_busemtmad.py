@@ -10,46 +10,55 @@ import os
 
 # Auxiliary functions
 #
-def infoLines(busemtmadService):
-  todayString = datetime.today().strftime('%Y%m%d')
-  infoLines = busemtmadService.infoLines(todayString)
+def info_lines(busemtmad_service):
+  today_string = datetime.today().strftime('%Y%m%d')
+  info_lines = busemtmad_service.info_lines(today_string)
 
-  if infoLines!=None:
+  if info_lines!=None:
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(infoLines)
+    pp.pprint(info_lines)
   else:
     print("The BusEMTMad service didn't return any data.")
 
-def infoLine(busemtmadService, lineId):
-  todayString = datetime.today().strftime('%Y%m%d')
-  infoLine = busemtmadService.infoLine(lineId, todayString)
+def info_line(busemtmad_service, line_id):
+  today_string = datetime.today().strftime('%Y%m%d')
+  info_line = busemtmad_service.info_line(line_id, today_string)
 
-  if infoLine!=None:
+  if info_line!=None:
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(infoLine)
+    pp.pprint(info_line)
   else:
     print("The BusEMTMad  service didn't return any data.")
 
-def infoStops(busemtmadService):
-  infoStops = busemtmadService.infoStops()
+def info_stops(busemtmad_service):
+  info_stops = busemtmad_service.info_stops()
 
-  if infoStops!=None:
+  if info_stops!=None:
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(infoStops)
+    pp.pprint(info_stops)
   else:
     print("The BusEMTMad service didn't return any data.")
 
-def infoStop(busemtmadService, stopId):
-  infoStop = busemtmadService.infoStop(stopId)
+def info_stop(busemtmad_service, stop_id):
+  info_stop = busemtmad_service.info_stop(stop_id)
 
-  if infoStop!=None:
+  if info_stop!=None:
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(infoStop)
+    pp.pprint(info_stop)
   else:
     print("The BusEMTMad  service didn't return any data.")
 
-def issues(busemtmadService, stopId):
-  issues = busemtmadService.issues(stopId)
+def line_stops(busemtmad_service, line_id, direction):
+  line_stops = busemtmad_service.line_stops(line_id, direction)
+
+  if line_stops!=None:
+    pp = pprint.PrettyPrinter(indent=2)
+    pp.pprint(line_stops)
+  else:
+    print("The BusEMTMad  service didn't return any data.")
+
+def issues(busemtmad_service, stop_id):
+  issues = busemtmad_service.issues(stop_id)
 
   if issues!=None:
     pp = pprint.PrettyPrinter(indent=2)
@@ -57,92 +66,100 @@ def issues(busemtmadService, stopId):
   else:
     print("The BusEMTMad  service didn't return any data.")
 
-def busesArrivals(busemtmadService, stopId, lineId):
-  if lineId!=None:
-    busesArrivals = busemtmadService.busesArrivals(stopId, lineId)
+def buses_arrivals(busemtmad_service, stop_id, line_id):
+  if line_id!=None:
+    buses_arrivals = busemtmad_service.buses_arrivals(stop_id, line_id)
   else:
-    busesArrivals = busemtmadService.busesArrivals(stopId)
+    buses_arrivals = busemtmad_service.buses_arrivals(stop_id)
 
-  if busesArrivals!=None:
+  if buses_arrivals!=None:
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(busesArrivals)
+    pp.pprint(buses_arrivals)
   else:
     print("The BusEMTMad  service didn't return any data.")
 
 # Setting up debuging level and debug file with environment variables
 #
-debugLevel = os.environ.get('MOBILITYLABS_DEBUGLEVEL',logging.WARN)
-debugFile = os.environ.get('MOBILITYLABS_DEBUGFILE')
+debug_level = os.environ.get('MOBILITYLABS_DEBUGLEVEL',logging.WARN)
+debug_file = os.environ.get('MOBILITYLABS_DEBUGFILE')
 
-if debugFile==None:
-  logging.basicConfig(level=debugLevel)
+if debug_file==None:
+  logging.basicConfig(level=debug_level)
 else:
-  logging.basicConfig(filename=debugFile, filemode='w', level=debugLevel)
+  logging.basicConfig(filename=debug_file, filemode='w', level=debug_level)
 
 parser = argparse.ArgumentParser()
-parser.add_argument("action", choices=['infoLines', 'infoLine', 'infoStops', 'infoStop', 'lineStops', 
-                                       'issues', 'busesArrivals'],
+parser.add_argument("action", choices=['info_lines', 'info_line', 'info_stops', 'info_stop', 'line_stops', 
+                                       'issues', 'buses_arrivals'],
                     help="what is going to be requested to the BusEMTMad service")
-parser.add_argument("credentialsFile", help="path to the file with info to access the service")
-parser.add_argument("-lid", "--lineId",
-                    help="bus line identifier for actions 'infoLine', 'lineStops' and 'issues'; this argument is optional for action 'busesArrivals'")
-parser.add_argument("-sid", "--stopId",
-                    help="stop identifier for action 'infoStop' and 'busesArrivals'")
+parser.add_argument("credentials_file", help="path to the file with info to access the service")
+parser.add_argument("-lid", "--line_id",
+                    help="bus line identifier for actions 'info_line', 'line_stops' and 'issues'; this argument is optional for action 'buses_arrivals'")
+parser.add_argument("-sid", "--stop_id",
+                    help="stop identifier for action 'info_stop' and 'buses_arrivals'")
 parser.add_argument("-dir", "--direction", choices=['1','2'],
-                    help="direction to be considered to analyze line info for action 'linesStops'; 1 for start to end, 2 for end to start")
+                    help="direction to be considered to analyze line info for action 'line_stops'; 1 for start to end, 2 for end to start")
 args = parser.parse_args()
 
 # Read credentials to instantiate the class to use the service
 #
 credentials = configparser.ConfigParser()
-credentials.read(args.credentialsFile)
+credentials.read(args.credentials_file)
 
-XClientID = credentials['DEFAULT']['XClientID']
-passkey = credentials['DEFAULT']['passkey']
-busemtmadService = BusEMTMad(XClientID, passkey)
-busemtmadService.logIn()
+x_client_id = credentials['DEFAULT']['x_client_id']
+pass_key = credentials['DEFAULT']['pass_key']
+busemtmad_service = BusEMTMad(x_client_id, pass_key)
+busemtmad_service.log_in()
 
 # Action dispatching if credentials logged the client into the service
 #
-if (busemtmadService.isLoggedIn()):
-  if args.action == "infoLines":
-    logging.debug("XClientID '%s' asking for lines information" % XClientID)
-    infoLines(busemtmadService)
-  elif args.action == "infoLine":
-    if args.lineId!=None:
-      logging.debug("XClientID '%s' asking for information for bus line '%s'" %
-                    (XClientID, args.lineId))
-      infoLine(busemtmadService, args.lineId)
+if (busemtmad_service.is_logged_in()):
+  if args.action == "info_lines":
+    logging.debug("x_client_id '%s' asking for lines information" % x_client_id)
+    info_lines(busemtmad_service)
+  elif args.action == "info_line":
+    if args.line_id!=None:
+      logging.debug("x_client_id '%s' asking for information for bus line '%s'" %
+                    (x_client_id, args.line_id))
+      info_line(busemtmad_service, args.line_id)
     else:
       logging.error("A bus line identifier has to be provided")
-      sys.exit("A bus line identifier has to be provided for action 'infoLine'")
-  elif args.action == "infoStops":
-    logging.debug("XClientID '%s' asking for bus stops information" % XClientID)
-    infoStops(busemtmadService)
-  elif args.action == "infoStop":
-    if args.stopId!=None:
-      logging.debug("XClientID '%s' asking for information for bus stop '%s'" %
-                    (XClientID, args.stopId))
-      infoStop(busemtmadService, args.stopId)
+      sys.exit("A bus line identifier has to be provided for action 'info_line'")
+  elif args.action == "info_stops":
+    logging.debug("x_client_id '%s' asking for bus stops information" % x_client_id)
+    info_stops(busemtmad_service)
+  elif args.action == "info_stop":
+    if args.stop_id!=None:
+      logging.debug("x_client_id '%s' asking for information for bus stop '%s'" %
+                    (x_client_id, args.stop_id))
+      info_stop(busemtmad_service, args.stop_id)
     else:
       logging.error("A bus stop identifier has to be provided")
-      sys.exit("A bus stop has to be provided for action 'infoStop'")
+      sys.exit("A bus stop identifier has to be provided for action 'info_stop'")
+  elif args.action == "line_stops":
+    if args.line_id!=None and args.direction!=None:
+      logging.debug("x_client_id '%s' asking for stops of the line '%s' with direction '%s'" %
+                    (x_client_id, args.line_id, args.direction))
+      line_stops(busemtmad_service, args.line_id, args.direction)
+    else:
+      logging.error("A bus line identifier and direction have to be provided")
+      sys.exit("A bus line identifier and direction have to be provided for action 'line_stops'")
   elif args.action == "issues":
-    if args.stopId!=None:
-      logging.debug("XClientID '%s' asking for issues for bus stop '%s'" %
-                    (XClientID, args.stopId))
-      issues(busemtmadService, args.stopId)
+    if args.stop_id!=None:
+      logging.debug("x_client_id '%s' asking for issues for bus stop '%s'" %
+                    (x_client_id, args.stop_id))
+      issues(busemtmad_service, args.stop_id)
     else:
       logging.error("A bus stop identifier has to be provided")
       sys.exit("A bus stop has to be provided for action 'issues'")
-  elif args.action == "busesArrivals":
-    if args.stopId!=None:
-      logging.debug("XClientID '%s' asking for buses arrivals for bus stop '%s' and bus line '%s'" %
-                    (XClientID, args.stopId, args.lineId))
-      busesArrivals(busemtmadService, args.stopId, args.lineId)
+  elif args.action == "buses_arrivals":
+    if args.stop_id!=None:
+      logging.debug("x_client_id '%s' asking for buses arrivals for bus stop '%s' and bus line '%s'" %
+                    (x_client_id, args.stop_id, args.line_id))
+      buses_arrivals(busemtmad_service, args.stop_id, args.line_id)
     else:
       logging.error("A bus stop identifier has to be provided")
       sys.exit("A bus stop has to be provided for action 'busesarrivals' at least")
 else:
-  logging.error("Unsuccessful login with XClientID '%s%'" % XClientId)
-  sys.exit("Unsuccessful login with XClientID '%s%'" % XClientId)
+  logging.error("Unsuccessful login with x_client_id '%s%'" % x_client_id)
+  sys.exit("Unsuccessful login with x_client_id '%s%'" % x_client_id)

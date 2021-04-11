@@ -9,10 +9,10 @@ class BiciMad(MobilityLabs):
      It extends the MobilityLabs class which encapsulates common functionality
      such authentication shared across several other classes.
   '''
-  def __init__(self, XClientId, passKey):
-    MobilityLabs.__init__(self, XClientId, passKey)
+  def __init__(self, x_client_id, pass_key):
+    MobilityLabs.__init__(self, x_client_id, pass_key)
 
-  def infoBikeStations(self):
+  def info_bike_stations(self):
     '''It returns the details of Madrid BiciMad Stations.
 
             Parameters:
@@ -24,7 +24,7 @@ class BiciMad(MobilityLabs):
                     (See https://apidocs.emtmadrid.es/#api-Block_4_TRANSPORT_BICIMAD-List_of_Bicimad_Stations for more info)
     '''
     url = "%s/transport/bicimad/stations/" % self.MLURL
-    headers = {'accessToken': self._accessToken}
+    headers = {'accessToken': self._access_token}
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
@@ -35,30 +35,30 @@ class BiciMad(MobilityLabs):
                   (resp.status_code, resp.reason))
     return None
 
-  def infoBikeStation(self, bikeStationId):
+  def info_bike_station(self, bike_station_id):
     '''It returns the details of a specific Madrid BiciMad Station.
 
             Parameters:
-                    bikeStationId (string): bike station identifier
+                    bike_station_id (string): bike station identifier
 
             Returns:
                     Array of JSON documents (most likely with one single document) with information 
                     about the bike stations or None if there was an error.
                     (See https://apidocs.emtmadrid.es/#api-Block_4_TRANSPORT_BICIMAD-List_of_Bicimad_Stations for more info)
     '''
-    url = "%s/transport/bicimad/stations/%s" % (self.MLURL,bikeStationId)
-    headers = {'accessToken': self._accessToken}
+    url = "%s/transport/bicimad/stations/%s" % (self.MLURL, bike_station_id)
+    headers = {'accessToken': self._access_token}
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
-      logging.debug("Info of bike station '%s': %s" % (bikeStationId, resp.json()['data']))
+      logging.debug("Info of bike station '%s': %s" % (bike_station_id, resp.json()['data']))
       return resp.json()['data']
 
     logging.error("Unable to retrieve info for bike station '%s' with code '%s' and message: %s" %
-                  (bikeStationId, resp.status_code, resp.reason))
+                  (bike_station_id, resp.status_code, resp.reason))
     return None
 
-  def infoBikes(self):
+  def info_bikes(self):
     '''It returns the details of Madrid BiciMad bikes.
 
             Parameters:
@@ -70,7 +70,7 @@ class BiciMad(MobilityLabs):
                     (See https://apidocs.emtmadrid.es/#api-Block_4_TRANSPORT_BICIMAD-List_of_BiciMAD_GO_bikes_on_realtime for more info)
     '''
     url = "%s/transport/bicimadgo/bikes/availability/" % self.MLURL
-    headers = {'accessToken': self._accessToken}
+    headers = {'accessToken': self._access_token}
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
@@ -81,26 +81,26 @@ class BiciMad(MobilityLabs):
                   (resp.status_code, resp.reason))
     return None
 
-  def infoBike(self, bikeId):
+  def info_bike(self, bike_id):
     '''It returns the details of a specific bike from the Madrid BiciMad service.
 
             Parameters:
-                    bikeId (string): bike identifier
+                    bike_id (string): bike identifier
 
             Returns:
                     Array of JSON documents with information about a specific bike from the
                     BiciMad service or None if there was an error.
                     (See https://apidocs.emtmadrid.es/#api-Block_4_TRANSPORT_BICIMAD-List_of_BiciMAD_GO_bikes_on_realtime for more info)
     '''
-    url = "%s/transport/bicimadgo/bikes/availability/%s" % (self.MLURL, bikeId)
-    headers = {'accessToken': self._accessToken}
+    url = "%s/transport/bicimadgo/bikes/availability/%s" % (self.MLURL, bike_id)
+    headers = {'accessToken': self._access_token}
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
-      logging.debug("Info of bike '%s' in the service: %s" % (resp.json()['data'], bikeId))
+      logging.debug("Info of bike '%s' in the service: %s" % (resp.json()['data'], bike_id))
       return resp.json()['data']
 
     logging.error("Unable to retrieve the info of bike '%s' with code '%s' and message: %s" %
-                  (bikeId, resp.status_code, resp.reason))
+                  (bike_id, resp.status_code, resp.reason))
     return None
 
