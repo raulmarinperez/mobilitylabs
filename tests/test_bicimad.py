@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from mobilitylabs.bicimad import BiciMad
 import configparser
 import argparse

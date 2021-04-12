@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from mobilitylabs.parkingemtmad import ParkingEMTMad
 import configparser
 import argparse

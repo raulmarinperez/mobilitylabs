@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from mobilitylabs.busemtmad import BusEMTMad
 from datetime import datetime
 import configparser
