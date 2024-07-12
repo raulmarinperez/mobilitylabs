@@ -10,11 +10,12 @@ The following are the requirements needed to make it work:
   1. Creating your own **developer account**
   2. Creating an **EMTing Application**
 
-This Python library has been successfully tested with [OSBDET S21R1](https://github.com/raulmarinperez/osbdet/tree/vs21r1) on a Debian 10 x64 host.
+This Python library has been successfully tested with [OSBDET S21R1](https://github.com/raulmarinperez/osbdet/tree/vs21r1) on a Debian 10 x64 host (and [OSBDET v2024r1](https://github.com/raulmarinperez/osbdet/tree/2024r1) on Debian 12 arm64).
 
-Remember to add the library to the **PYTHONPATH environment variable** if you want to use it from your code or if you want to run the tests Python scripts; you can do so by running the following line within the folder where the repo was cloned:
+Remember to add the library to the **PYTHONPATH environment variable** if you want to use it from your code or if you want to run the tests Python scripts; you can do so by running the following lines within the folder where the repo was cloned:
 
 ```
+$ cd src
 $ export PYTHONPATH=$PYTHONPATH:`pwd`
 ```
 If you want to persist this environment variable, **add it to your user's profile** and it'll be created everytime you log into your computer.
@@ -35,7 +36,7 @@ The following are the functions/webmethods wrapped at the moment:
 `test_busemtmad.py` let you test this service easily; before you can use it, get your own XClientID and passkey and store them into the `credentials.ini` file. `test_busemtmad.py -h` will give you all the details on how to run it:
 
 ```
-$ tests/test_busemtmad.py -h
+$ python3 tests/test_busemtmad.py -h
 usage: test_busemtmad.py [-h] [-lid LINEID] [-sid STOPID] [-dir {1,2}]
                          {info_lines,info_line,info_stops,info_stop,line_stops,issues,buses_arrivals} credentials_file
 
@@ -70,7 +71,7 @@ The following are the functions/webmethods wrapped at the moment:
 `test_bicimad.py` let you test this service easily; before you can use it, get your own XClientID and passkey and store them into the `credentials.ini` file. `test_bicimad.py -h` will give you all the details on how to run it:
 
 ```
-$ tests/test_bicimad.py -h
+$ python3 tests/test_bicimad.py -h
 usage: test_bicimad.py [-h] [-sid BIKESTATIONID] [-bid BIKEID]
                        {info_bike_stations,info_bike_station,info_bikes,info_bike} credentials_file
 
@@ -99,7 +100,7 @@ The following are the functions/webmethods wrapped at the moment:
 `test_parkings.py` let you test this service easily; before you can use it, get your own XClientID and passkey and store them into the `credentials.ini` file. `test_parkings.py -h` will give you all the details on how to run it:
 
 ```
-$ tests/test_parkings.py -h
+$ python3 tests/test_parkings.py -h
 usage: test_parkings.py [-h] [-id PARKINGID] {info_parkings,info_parking,availability} credentials_file
 
 positional arguments:
@@ -115,3 +116,4 @@ optional arguments:
 
 ## Changelog
 - **v0.1 (20210410) -** initial release.
+- **v0.1.1 (20240712) -** update to make it compatible with OSBDET v2024r1
